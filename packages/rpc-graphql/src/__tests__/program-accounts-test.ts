@@ -2,6 +2,7 @@ import {
     createSolanaRpcApi,
     GetAccountInfoApi,
     GetBlockApi,
+    GetMultipleAccountsApi,
     GetProgramAccountsApi,
     GetTransactionApi,
 } from '@solana/rpc-core';
@@ -12,12 +13,14 @@ import fetchMock from 'jest-fetch-mock-fork';
 import { createRpcGraphQL, RpcGraphQL } from '../index';
 
 describe('programAccounts', () => {
-    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>;
+    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>({
+        rpc = createJsonRpc<
+            GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi
+        >({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
@@ -590,7 +593,7 @@ describe('programAccounts', () => {
                     data: {
                         programAccounts: expect.arrayContaining([
                             {
-                                data: 'E8f4pET',
+                                data: 'E8f4pET', // As tested on local RPC
                             },
                         ]),
                     },
@@ -627,7 +630,7 @@ describe('programAccounts', () => {
                     data: {
                         programAccounts: expect.arrayContaining([
                             {
-                                data: 'dGVzdCA=',
+                                data: 'dGVzdCA=', // As tested on local RPC
                             },
                         ]),
                     },

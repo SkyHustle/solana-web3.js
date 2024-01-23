@@ -1,5 +1,11 @@
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import type { GetAccountInfoApi, GetBlockApi, GetProgramAccountsApi, GetTransactionApi } from '@solana/rpc-core';
+import type {
+    GetAccountInfoApi,
+    GetBlockApi,
+    GetMultipleAccountsApi,
+    GetProgramAccountsApi,
+    GetTransactionApi,
+} from '@solana/rpc-core';
 import type { Rpc } from '@solana/rpc-types';
 import { graphql } from 'graphql';
 
@@ -7,7 +13,7 @@ import { createSolanaGraphQLContext } from './context';
 import { createSolanaGraphQLResolvers } from './resolvers';
 import { createSolanaGraphQLTypeDefs } from './schema';
 
-type RpcMethods = GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi;
+type RpcMethods = GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi;
 
 export interface RpcGraphQL {
     query(

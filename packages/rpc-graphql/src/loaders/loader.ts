@@ -6,20 +6,22 @@ import { Commitment, Slot } from '@solana/rpc-types';
 // @ts-ignore
 import stringify from 'json-stable-stringify';
 
+export type BatchLoadPromiseCallback<T> = Readonly<{
+    resolve: (value: T) => void;
+    reject: (reason?: unknown) => void;
+}>;
+
+// Loader base types
 export type LoadFn<TArgs, T> = (args: TArgs) => Promise<T>;
 export type Loader<TArgs, T> = { load: LoadFn<TArgs, T> };
 
-// FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
-// export type AccountLoaderArgs = { address: Parameters<GetAccountInfoApi['getAccountInfo']>[0] } & Parameters<
-//     GetAccountInfoApi['getAccountInfo']
-// >[1];
-export type AccountLoaderArgs = {
-    address: Address;
+export type AccountLoaderArgsBase = {
     commitment?: Commitment;
     dataSlice?: { offset: number; length: number };
     encoding?: 'base58' | 'base64' | 'base64+zstd' | 'jsonParsed';
     minContextSlot?: Slot;
 };
+export type AccountLoaderArgs = { address: Address } & AccountLoaderArgsBase;
 export type AccountLoaderValue = ReturnType<GetAccountInfoApi['getAccountInfo']>['value'] | null;
 export type AccountLoader = Loader<AccountLoaderArgs, AccountLoaderValue>;
 
@@ -35,6 +37,10 @@ export type BlockLoaderArgs = {
 };
 export type BlockLoaderValue = ReturnType<GetBlockApi['getBlock']> | null;
 export type BlockLoader = Loader<BlockLoaderArgs, BlockLoaderValue>;
+
+export type MultipleAccountsLoaderArgs = { addresses: Address[] } & AccountLoaderArgsBase;
+export type MultipleAccountsLoaderValue = AccountLoaderValue[];
+export type MultipleAccountsLoader = Loader<MultipleAccountsLoaderArgs, MultipleAccountsLoaderValue>;
 
 // FIX ME: https://github.com/solana-labs/solana-web3.js/pull/2052
 // export type ProgramAccountsLoaderArgs = {

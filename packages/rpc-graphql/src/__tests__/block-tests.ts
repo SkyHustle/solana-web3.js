@@ -2,6 +2,7 @@ import {
     createSolanaRpcApi,
     type GetAccountInfoApi,
     GetBlockApi,
+    GetMultipleAccountsApi,
     GetProgramAccountsApi,
     GetTransactionApi,
 } from '@solana/rpc-core';
@@ -21,7 +22,7 @@ import {
 } from './__setup__';
 
 describe('block', () => {
-    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>;
+    let rpc: Rpc<GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi>;
     let rpcGraphQL: RpcGraphQL;
 
     // Random slot for testing.
@@ -31,7 +32,9 @@ describe('block', () => {
     beforeEach(() => {
         fetchMock.resetMocks();
         fetchMock.dontMock();
-        rpc = createJsonRpc<GetAccountInfoApi & GetBlockApi & GetProgramAccountsApi & GetTransactionApi>({
+        rpc = createJsonRpc<
+            GetAccountInfoApi & GetBlockApi & GetMultipleAccountsApi & GetProgramAccountsApi & GetTransactionApi
+        >({
             api: createSolanaRpcApi(),
             transport: createHttpTransport({ url: 'http://127.0.0.1:8899' }),
         });
